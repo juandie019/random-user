@@ -2,41 +2,23 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      color="pink"
       dark
     >
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+        <router-link to="/">
+          <h1 class="white--color">
+            U Random
+          </h1>
+        </router-link>
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <router-link to="/favourites">
+        <span class="mr-2">My favourites {{favouritesCount}}</span>
+      </router-link>
     </v-app-bar>
-
     <v-main>
       <router-view/>
     </v-main>
@@ -44,12 +26,42 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'App',
 
-  data: () => ({
-    //
-  }),
+  async mounted(){
+    try {
+      await this.fetchUsers();
+    } catch (error) {
+      console.error('Error', error);
+    }
+  },
+
+  methods: { 
+    ...mapActions('user', ['fetchUsers',])
+  },
+
+  computed: { 
+    ...mapGetters('user', ['favouritesCount'])
+  },
 };
 </script>
+
+<style>
+a {
+  text-decoration: none;
+  color: white !important;
+}
+
+.own-container {
+  max-width: 1200px;
+  margin: auto;
+}
+@media screen and (max-width:1200px) {
+  .own-container {
+    padding: 0px 20px;
+  }
+}
+</style>
