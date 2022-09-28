@@ -14,4 +14,9 @@ export const REMOVE_FROM_FAVOURITES = (state, username) => {
     state.favouritesUsers.splice(indexOfUser, 1);
 }
 
+export const SET_LOADING = (state, loading = true) => {
+    state.loading = loading
+}
+
+
 

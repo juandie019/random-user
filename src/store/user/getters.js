@@ -17,3 +17,7 @@ export const hasFavouritesUsers = (state) => {
 export const favouritesCount = (state) => {
     return state.favouritesUsers.length;
 }
+
+export const isLoading = (state) => {
+    return state.loading;
+}

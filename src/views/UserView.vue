@@ -39,16 +39,17 @@ export default {
   data() {
     return {
       user: null,
+      watingFordata: null
     }
   },
 
   async mounted(){
-    try {
-      const userId = this.$route.params.id;
-      this.user = await this.findUser(userId);
-    } catch (error) {
-      console.log(error)  
-    }
+    this.watingFordata = setInterval( async () => {
+      if(!this.isLoading){
+        await this.fetchUser();
+        clearInterval(this.watingFordata)
+      }
+    }, 100)
   },
 
   methods: {
@@ -56,11 +57,20 @@ export default {
 
     modifyFavourites(){
       this.updateFavourites({data: this.user, add: !this.isFav})
+    },
+
+    async fetchUser(){
+      try {
+        const userId = this.$route.params.id;
+        this.user = await this.findUser(userId);
+      } catch (error) {
+        console.log(error)  
+      }
     }
   },
 
   computed: {
-    ...mapGetters('user', ['favouritesUsers']),
+    ...mapGetters('user', ['favouritesUsers', 'isLoading']),
 
     isFav(){
       const indexOfUser = this.favouritesUsers.findIndex(user => {
@@ -73,6 +83,10 @@ export default {
     buttonText(){
       return this.isFav ? 'Remove from favourites' : 'Add to favourites'
     }
+  },
+
+  beforeDestroy(){
+    clearInterval(this.watingFordata);
   }
 }
 </script>

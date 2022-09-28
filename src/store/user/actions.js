@@ -1,10 +1,13 @@
 import api from '../../api'
 
 export const fetchUsers = async (context) => {
+
+    context.commit('SET_LOADING', true);
     const response = await api.get('/?results=100&seed=foobar')
     const users = response.data.results;
     
     context.commit('SET_DATA', users);
+    context.commit('SET_LOADING', false);
     return;    
 }
 
